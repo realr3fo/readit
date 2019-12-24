@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">readit</string>
+    <string name="title_activity_read_it">ReadItActivity</string>
+</resources>

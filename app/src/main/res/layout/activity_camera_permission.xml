@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CameraPermissionActivity">
+
+    <TextView
+        android:id="@+id/title_camera_permission"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Camera Permission Request"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+
+    <TextView
+        android:id="@+id/first_sentence"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_camera_permission"
+        android:layout_marginTop="@android:dimen/app_icon_size"
+        android:text="Readit need the Camera Permission to operate. Readit would only use the camera to detect texts that is on the camera at real time. Therefore, it would be wise if the user would allow readit to use the camera. Please allow camera permission from the settings or at the start-up screen of the readit app"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+</RelativeLayout>
