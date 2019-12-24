@@ -21,20 +21,11 @@
 package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit;
 
 import android.app.Activity;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
-
-import java.util.Objects;
-
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 public class AboutMeActivity extends Activity {
 
@@ -49,13 +40,6 @@ public class AboutMeActivity extends Activity {
         // SetUp the Surface view for the activity
         GLES20SurfaceView = new AboutMeSurfaceView(this);
         setContentView(GLES20SurfaceView);
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                .setSmallIcon(R.drawable.notification_icon)
-//                .setContentTitle("My notification")
-//                .setContentText("Much longer text that cannot fit one line...")
-//                .setStyle(new NotificationCompat.BigTextStyle()
-//                        .bigText("Much longer text that cannot fit one line..."))
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
     }
 
@@ -69,6 +53,13 @@ public class AboutMeActivity extends Activity {
     public void onResume() {
         super.onResume();
         GLES20SurfaceView.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
 }
