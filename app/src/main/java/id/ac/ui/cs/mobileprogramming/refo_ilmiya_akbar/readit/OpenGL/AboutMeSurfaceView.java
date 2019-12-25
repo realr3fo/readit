@@ -14,9 +14,7 @@ public class AboutMeSurfaceView extends GLSurfaceView {
         super(context);
 
         setEGLConfigChooser(false);
-        // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
-        // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(theRenderer);
     }
 

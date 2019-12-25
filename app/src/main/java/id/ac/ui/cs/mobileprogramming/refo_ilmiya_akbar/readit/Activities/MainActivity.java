@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         new AlertDialog.Builder(MainActivity.this)
-                                .setTitle("Enable Wifi")
-                                .setMessage("Please enable wifi if you want to use text to speech")
+                                .setTitle("No Internet")
+                                .setMessage("Please enable wifi or mobile data if you want to use text to speech")
                                 .setPositiveButton("Ok", null)
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
@@ -98,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("Enable Wifi")
-                            .setMessage("Please enable wifi if you want to see about me content")
+                            .setTitle("No Internet")
+                            .setMessage("Please enable wifi or mobile data if you want to see about me content")
                             .setPositiveButton("Ok", null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
