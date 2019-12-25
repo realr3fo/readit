@@ -8,13 +8,9 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -28,47 +24,70 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.databinding.DataBindingUtil;
 import id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.R;
+import id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.databinding.ActivityMainBinding;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    SurfaceView mCameraView;
-    TextView mTextView;
-    CameraSource mCameraSource;
-    Button readIt, aboutApp;
-
-    private static final String TAG = "MainActivity";
     private static final int requestPermissionID = 101;
+
+    ActivityMainBinding binding;
+
+    CameraSource mCameraSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mCameraView = findViewById(R.id.surfaceView);
-        mTextView = findViewById(R.id.text_view);
-        readIt = findViewById(R.id.button);
-        aboutApp = findViewById(R.id.about_app);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        final ConnectivityManager cm =
+
+        ConnectivityManager cm =
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        readIt.setOnClickListener(new View.OnClickListener() {
+
+        setUpTextToSpeechButton(cm);
+        setUpAboutMeButton(cm);
+        startCameraSource();
+    }
+
+    private void setUpAboutMeButton(ConnectivityManager cm) {
+        final ConnectivityManager cmFinal = cm;
+        binding.aboutApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NetworkInfo activeNetwork = cmFinal.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null &&
+                        activeNetwork.isConnectedOrConnecting();
+                if (isConnected) {
+                    Intent intent = new Intent(getApplicationContext(), AboutMeActivity.class);
+                    startActivity(intent);
+                } else {
+                    String title = getResources().getString(R.string.no_internet);
+                    String message = getResources().getString(R.string.enable_internet_for_about_me);
+                    alertDialog(title, message);
+
+                }
+            }
+        });
+    }
+
+
+    private void setUpTextToSpeechButton(ConnectivityManager cm) {
+        final ConnectivityManager cmFinal = cm;
+        binding.textToSpeech.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                String toSpeak = mTextView.getText().toString();
+                String toSpeak = binding.textView.getText().toString();
                 if (toSpeak.equals("")) {
-                    new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("No text detected!")
-                            .setMessage("There seems to be no text detected on the camera")
-                            .setPositiveButton("Ok", null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+                    String title = getResources().getString(R.string.no_text_detected);
+                    String message = getResources().getString(R.string.no_text_on_camera);
+                    alertDialog(title, message);
                 } else {
-                    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                    NetworkInfo activeNetwork = cmFinal.getActiveNetworkInfo();
                     boolean isConnected = activeNetwork != null &&
                             activeNetwork.isConnectedOrConnecting();
                     if (isConnected) {
@@ -76,43 +95,18 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("text", toSpeak);
                         startActivity(intent);
                     } else {
-                        new AlertDialog.Builder(MainActivity.this)
-                                .setTitle("No Internet")
-                                .setMessage("Please enable wifi or mobile data if you want to use text to speech")
-                                .setPositiveButton("Ok", null)
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
+                        String title = getResources().getString(R.string.no_internet);
+                        String message = getResources().getString(R.string.enable_internet_for_text_to_speech);
+                        alertDialog(title, message);
                     }
                 }
             }
         });
-
-        aboutApp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                boolean isConnected = activeNetwork != null &&
-                        activeNetwork.isConnectedOrConnecting();
-                if (isConnected) {
-                    Intent intent = new Intent(getApplicationContext(), AboutMeActivity.class);
-                    startActivity(intent);
-                } else {
-                    new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("No Internet")
-                            .setMessage("Please enable wifi or mobile data if you want to see about me content")
-                            .setPositiveButton("Ok", null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
-            }
-        });
-        startCameraSource();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode != requestPermissionID) {
-            Log.d(TAG, "Got unexpected permission result: " + requestCode);
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             return;
         }
@@ -122,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
-                mCameraSource.start(mCameraView.getHolder());
+                mCameraSource.start(binding.surfaceView.getHolder());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -133,16 +127,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void startCameraSource() {
         final TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-        if (!textRecognizer.isOperational()) {
-            Log.w(TAG, "Detector dependencies not loaded yet");
-        } else {
+        if (textRecognizer.isOperational()) {
             mCameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
                     .setRequestedPreviewSize(1280, 1024)
                     .setAutoFocusEnabled(true)
                     .setRequestedFps(2.0f)
                     .build();
-            mCameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+
+            binding.surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
 
                 @Override
                 public void surfaceCreated(SurfaceHolder holder) {
@@ -156,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                                     requestPermissionID);
                             return;
                         }
-                        mCameraSource.start(mCameraView.getHolder());
+                        mCameraSource.start(binding.surfaceView.getHolder());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -171,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                     mCameraSource.stop();
                 }
             });
+
             textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
 
                 @Override
@@ -182,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                     final SparseArray<TextBlock> items = detections.getDetectedItems();
                     if (items.size() != 0) {
 
-                        mTextView.post(new Runnable() {
+                        binding.textView.post(new Runnable() {
 
                             @Override
                             public void run() {
@@ -192,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                                     stringBuilder.append(item.getValue());
                                     stringBuilder.append("\n");
                                 }
-                                mTextView.setText(stringBuilder.toString());
+                                binding.textView.setText(stringBuilder.toString());
                             }
                         });
                     }
@@ -203,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void backPressAlert() {
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Are You Sure You want to Quit?")
+                .setTitle(getResources().getString(R.string.quit))
                 .setNegativeButton(android.R.string.cancel, null) // dismisses by default
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
@@ -225,5 +219,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         backPressAlert();
+    }
+
+    private void alertDialog(String title, String message) {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(getResources().getString(R.string.ok), null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

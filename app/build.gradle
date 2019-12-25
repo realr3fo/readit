@@ -21,6 +21,7 @@ android {
             path file('src/main/cpp/CMakeLists.txt')
         }
     }
+    dataBinding.enabled = true
 
 }
 

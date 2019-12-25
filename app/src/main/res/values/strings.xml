@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">readit</string>
     <string name="title_activity_read_it">ReadItActivity</string>
+    <string name="no_text_detected">No text detected!</string>
+    <string name="no_text_on_camera">There seems to be no text detected on the camera</string>
+    <string name="ok">Ok</string>
+    <string name="no_internet">No Internet</string>
+    <string name="enable_internet_for_text_to_speech">Please enable wifi or mobile data if you want to use text to speech</string>
+    <string name="enable_internet_for_about_me">Please enable wifi or mobile data if you want to see about me content</string>
+    <string name="quit">Are You Sure You want to Quit?</string>
+    <string name="notif_subject">readit is reading your captured text!</string>
+    <string name="readit_channel">readit channel</string>
+    <string name="readit_channel_desc">notification channel for readit application</string>
+    <string name="camera_permission_request">Camera Permission Request</string>
+    <string name="readit_camera_permission_request_desc">Readit need the Camera Permission to operate. Readit would only use the camera to detect texts that is on the camera at real time. Therefore, it would be wise if the user would allow readit to use the camera. Please allow camera permission from the settings or at the start-up screen of the readit app</string>
+    <string name="text_to_speech">Text to Speech</string>
+    <string name="about_app">About App</string>
 </resources>
