@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context="id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.MainActivity">
+    tools:context="id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.Activities.MainActivity">
 
     <SurfaceView
         android:id="@+id/surfaceView"
@@ -20,7 +20,6 @@
         android:layout_margin="8dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Text"
         android:textColor="@android:color/black"
         android:textSize="20sp"
         android:textStyle="bold" />

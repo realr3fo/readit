@@ -18,7 +18,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit;
+package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.OpenGL;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

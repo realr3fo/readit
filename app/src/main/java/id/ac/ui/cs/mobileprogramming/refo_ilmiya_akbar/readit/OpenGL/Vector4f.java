@@ -1,4 +1,4 @@
-package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit;
+package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.OpenGL;
 
 public class Vector4f {
     public float x;

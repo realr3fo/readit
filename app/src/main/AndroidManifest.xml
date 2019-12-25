@@ -19,15 +19,15 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".CameraPermissionActivity"
+            android:name=".Activities.CameraPermissionActivity"
             android:noHistory="true"
 
             ></activity>
         <activity
-            android:name=".ReadItActivity"
+            android:name=".Activities.ReadItActivity"
             android:launchMode="singleTop"
             android:noHistory="true" />
-        <activity android:name=".MainActivity"
+        <activity android:name=".Activities.MainActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,14 +36,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AboutMeActivity"
+            android:name=".Activities.AboutMeActivity"
             android:noHistory="true" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr" />
 
-        <service android:name=".SpeechService" />
+        <service android:name=".Services.SpeechService" />
     </application>
 
 </manifest>

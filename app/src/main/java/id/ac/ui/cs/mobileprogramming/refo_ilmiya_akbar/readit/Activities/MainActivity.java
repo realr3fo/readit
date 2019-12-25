@@ -1,4 +1,4 @@
-package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit;
+package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.Activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -29,7 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
+import id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.R;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final int requestPermissionID = 101;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,32 +49,40 @@ public class MainActivity extends AppCompatActivity {
         mCameraView = findViewById(R.id.surfaceView);
         mTextView = findViewById(R.id.text_view);
         readIt = findViewById(R.id.button);
-
         aboutApp = findViewById(R.id.about_app);
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         final ConnectivityManager cm =
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-
         readIt.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                boolean isConnected = activeNetwork != null &&
-                        activeNetwork.isConnectedOrConnecting();
-                if (isConnected) {
-                    String toSpeak = mTextView.getText().toString();
-                    Intent intent = new Intent(getApplicationContext(), ReadItActivity.class);
-                    intent.putExtra("text", toSpeak);
-                    startActivity(intent);
-                } else {
+                String toSpeak = mTextView.getText().toString();
+                if (toSpeak.equals("")) {
                     new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("Enable Wifi")
-                            .setMessage("Please enable wifi if you want to use text to speech")
+                            .setTitle("No text detected!")
+                            .setMessage("There seems to be no text detected on the camera")
                             .setPositiveButton("Ok", null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
+                } else {
+                    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                    boolean isConnected = activeNetwork != null &&
+                            activeNetwork.isConnectedOrConnecting();
+                    if (isConnected) {
+                        Intent intent = new Intent(getApplicationContext(), ReadItActivity.class);
+                        intent.putExtra("text", toSpeak);
+                        startActivity(intent);
+                    } else {
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Enable Wifi")
+                                .setMessage("Please enable wifi if you want to use text to speech")
+                                .setPositiveButton("Ok", null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
                 }
             }
         });
@@ -84,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         aboutApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 boolean isConnected = activeNetwork != null &&
                         activeNetwork.isConnectedOrConnecting();
@@ -99,11 +104,8 @@ public class MainActivity extends AppCompatActivity {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                 }
-
             }
         });
-
-
         startCameraSource();
     }
 
@@ -130,27 +132,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startCameraSource() {
-
-        //Create the TextRecognizer
         final TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-
         if (!textRecognizer.isOperational()) {
             Log.w(TAG, "Detector dependencies not loaded yet");
         } else {
-
-            //Initialize camerasource to use high resolution and set Autofocus on.
             mCameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
                     .setRequestedPreviewSize(1280, 1024)
                     .setAutoFocusEnabled(true)
                     .setRequestedFps(2.0f)
                     .build();
-
-            /**
-             * Add call back to SurfaceView and check if camera permission is granted.
-             * If permission is granted we can start our cameraSource and pass it to surfaceView
-             */
             mCameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+
                 @Override
                 public void surfaceCreated(SurfaceHolder holder) {
                     try {
@@ -178,23 +171,19 @@ public class MainActivity extends AppCompatActivity {
                     mCameraSource.stop();
                 }
             });
-
-            //Set the TextRecognizer's Processor.
             textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
+
                 @Override
                 public void release() {
                 }
 
-                /**
-                 * Detect all the text from camera using TextBlock and the values into a stringBuilder
-                 * which will then be set to the textView.
-                 * */
                 @Override
                 public void receiveDetections(Detector.Detections<TextBlock> detections) {
                     final SparseArray<TextBlock> items = detections.getDetectedItems();
                     if (items.size() != 0) {
 
                         mTextView.post(new Runnable() {
+
                             @Override
                             public void run() {
                                 StringBuilder stringBuilder = new StringBuilder();
@@ -217,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle("Are You Sure You want to Quit?")
                 .setNegativeButton(android.R.string.cancel, null) // dismisses by default
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();

@@ -1,11 +1,10 @@
-package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit;
+package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.Services;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
 
 import java.util.Locale;
 

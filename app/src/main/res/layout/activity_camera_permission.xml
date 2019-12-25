@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CameraPermissionActivity">
+    tools:context=".Activities.CameraPermissionActivity">
 
     <TextView
         android:id="@+id/title_camera_permission"

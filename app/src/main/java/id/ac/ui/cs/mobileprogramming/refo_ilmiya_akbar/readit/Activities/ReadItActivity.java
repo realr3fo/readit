@@ -1,15 +1,11 @@
-package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit;
+package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.Activities;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
 import android.widget.TextView;
 
 import java.util.Objects;
@@ -17,6 +13,8 @@ import java.util.Objects;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.R;
+import id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.Services.SpeechService;
 
 public class ReadItActivity extends AppCompatActivity {
     TextView text;
@@ -62,12 +60,12 @@ public class ReadItActivity extends AppCompatActivity {
     }
 
     public void notificate(String toSpeak) {
-        // Create an explicit intent for an Activity in your app
         Intent intent = new Intent(this, ReadItActivity.class);
         intent.putExtra("fromNotification", true);
         intent.putExtra("text", toSpeak);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.notification_icon)
@@ -76,12 +74,9 @@ public class ReadItActivity extends AppCompatActivity {
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(toSpeak))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-        // notificationId is a unique int for each notification that you must define
         notificationManager.notify(0, builder.build());
     }
 
@@ -89,8 +84,8 @@ public class ReadItActivity extends AppCompatActivity {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Channel Name";
-            String description = "Channel Desc";
+            CharSequence name = "readit channel";
+            String description = "notification channel for readit application";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
