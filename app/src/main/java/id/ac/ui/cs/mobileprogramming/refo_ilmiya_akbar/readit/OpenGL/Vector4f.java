@@ -1,9 +1,9 @@
 package id.ac.ui.cs.mobileprogramming.refo_ilmiya_akbar.readit.OpenGL;
 
 public class Vector4f {
-    public float x;
+    float x;
     float y;
-    public float z;
+    float z;
     private float w;
 
     public String toString() {
@@ -27,7 +27,7 @@ public class Vector4f {
         w = aW;
     }
 
-    public void set(float aX, float aY, float aZ, float aW) {
+    void set(float aX, float aY, float aZ, float aW) {
         x = aX;
         y = aY;
         z = aZ;

@@ -24,7 +24,7 @@ public class AboutMeTextRenderer implements GLSurfaceView.Renderer {
 
     void touchMove(float aX, float aY,
                    float aPrevX, float aPrevY) {
-        theTextObj.setRelPos((aPrevY - aY) / (float) (theViewportHeight / 4));
+        theTextObj.setRelPos((aPrevY - aY) / (theViewportHeight / 4));
     }
 
     void touchDown(float aX, float aY) {
